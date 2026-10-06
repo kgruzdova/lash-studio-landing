@@ -1,0 +1,2033 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LASH STUDIO — студия наращивания ресниц</title>
+<meta name="description" content="Студия наращивания ресниц: Классика, Мокрый эффект, 1,5D, 2D, 3D. Подберём эффект под ваши глаза.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M5 24 Q16 8 27 22' stroke='%23c08b72' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%23c08b72' stroke-width='1.6' opacity='.45'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   1. ТОКЕНЫ И БАЗА
+   ============================================================ */
+:root{
+  /* Палитра подобрана по скриншоту-референсу (Screenshorts/reference.png):
+     тёплый крем #f8f5ee, пыльно-персиковые акценты #d8a890-#b4846c,
+     тёплые коричневые тени #685642 / #2b2117 */
+  --bg:            #f8f5ee;
+  --bg-soft:       #f3eee5;
+  --surface:       #fffdf8;
+  --ink:           #2b2117;
+  --ink-soft:      rgba(43,33,23,.72);
+  --muted:         rgba(43,33,23,.55);
+  --line:          rgba(107,78,58,.16);
+  --line-strong:   rgba(107,78,58,.30);
+  --accent:        #c08b72;
+  --accent-deep:   #a4705a;
+  --accent-soft:   rgba(192,139,114,.16);
+  --cream:         #faf3e9;
+  --dark:          #241b13;
+  --glass:         rgba(255,253,248,.8);
+  --star:          #d9a076;
+  --r-lg:          28px;
+  --r-xl:          36px;
+  --r-pill:        999px;
+  --shadow-soft:   0 24px 60px -28px rgba(62,42,28,.35);
+  --shadow-card:   0 18px 44px -26px rgba(62,42,28,.28);
+  --font-serif:    "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-sans:     "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --container:     1180px;
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+html, body{ max-width:100%; overflow-x:clip; }
+@supports not (overflow:clip){ html,body{ overflow-x:hidden; } }
+body{
+  font-family:var(--font-sans);
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+img, video, svg{ display:block; max-width:100%; }
+a{ color:inherit; text-decoration:none; }
+button{ font:inherit; color:inherit; background:none; border:none; cursor:pointer; }
+::selection{ background:rgba(165,131,95,.28); }
+:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; border-radius:6px; }
+
+.container{ width:min(var(--container), calc(100% - clamp(28px, 6vw, 72px))); margin-inline:auto; }
+.section{ padding-block:clamp(58px, 8vw, 108px); position:relative; }
+main section[id], footer[id]{ scroll-margin-top:78px; }
+.section--soft{ background:var(--bg-soft); }
+
+/* Заголовки секций */
+.s-head{ max-width:760px; margin:0 auto clamp(34px, 5vw, 56px); text-align:center; }
+.s-eyebrow{
+  display:inline-flex; align-items:center; gap:10px;
+  font-size:.8rem; font-weight:700; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--accent-deep);
+}
+.s-eyebrow::before, .s-eyebrow::after{ content:""; width:22px; height:1px; background:var(--accent); opacity:.55; }
+.s-title{
+  font-family:var(--font-serif); font-weight:600;
+  font-size:clamp(1.8rem, 4vw, 3rem); line-height:1.14;
+  margin-top:14px; letter-spacing:.2px;
+}
+.s-sub{ color:var(--muted); font-size:clamp(.98rem, 1.3vw, 1.08rem); margin-top:16px; }
+
+/* Метка «демо» — помечает демонстрационные отзывы и показатели */
+.demo-tag{
+  display:inline-block; padding:3px 10px; border-radius:var(--r-pill);
+  background:rgba(43,33,23,.07); border:1px dashed rgba(107,78,58,.45);
+  color:var(--muted); font-family:var(--font-sans); font-style:normal;
+  font-size:.64rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase;
+  line-height:1.4; vertical-align:middle; white-space:nowrap;
+}
+
+/* Кнопки-таблетки */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:10px;
+  padding:15px 30px; border-radius:var(--r-pill);
+  font-weight:700; font-size:.95rem; line-height:1; letter-spacing:.01em;
+  transition:transform .25s ease, box-shadow .25s ease, background-color .25s ease, color .25s ease, border-color .25s ease;
+  white-space:nowrap;
+}
+.btn svg{ flex:none; }
+.btn--primary{ background:var(--ink); color:var(--cream); }
+.btn--primary:hover{ transform:translateY(-2px); box-shadow:0 16px 34px -14px rgba(47,38,28,.5); }
+.btn--light{ background:var(--cream); color:var(--ink); }
+.btn--light:hover{ transform:translateY(-2px); box-shadow:0 16px 34px -16px rgba(0,0,0,.4); }
+.btn--accent{ background:var(--accent); color:#fff; }
+.btn--accent:hover{ transform:translateY(-2px); box-shadow:0 16px 34px -16px rgba(124,95,64,.55); background:var(--accent-deep); }
+.btn--ghost{ border:1px solid var(--line-strong); background:transparent; color:var(--ink); }
+.btn--ghost:hover{ border-color:var(--accent); color:var(--accent-deep); background:var(--accent-soft); }
+.btn--sm{ padding:11px 20px; font-size:.85rem; }
+
+/* «Стекло» */
+.glass{
+  background:var(--glass);
+  -webkit-backdrop-filter:blur(18px) saturate(1.25);
+  backdrop-filter:blur(18px) saturate(1.25);
+  border:1px solid rgba(255,255,255,.65);
+}
+
+/* Плейсхолдеры медиа */
+.ph-media{
+  position:relative; background-size:cover; background-position:center;
+  border-radius:var(--r-xl); overflow:hidden;
+}
+.ph-media::after{
+  content:""; position:absolute; inset:0; border-radius:inherit;
+  border:1px solid rgba(255,255,255,.35); pointer-events:none;
+}
+
+/* Появление при скролле */
+.reveal{ opacity:0; transform:translateY(26px); transition:opacity .75s ease, transform .75s cubic-bezier(.2,.65,.25,1); transition-delay:var(--d, 0s); }
+.reveal.visible{ opacity:1; transform:none; }
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior:auto; }
+  *{ transition-duration:.001ms !important; animation-duration:.001ms !important; }
+  .reveal{ opacity:1; transform:none; }
+}
+
+/* ============================================================
+   2. ШАПКА
+   ============================================================ */
+.header{
+  position:fixed; inset:0 0 auto 0; z-index:90;
+  transition:background-color .3s ease, box-shadow .3s ease, padding .3s ease, border-color .3s ease;
+  border-bottom:1px solid transparent;
+  padding:14px 0;
+}
+.header.scrolled{
+  background:rgba(245,239,230,.72);
+  -webkit-backdrop-filter:blur(18px) saturate(1.3);
+  backdrop-filter:blur(18px) saturate(1.3);
+  border-bottom-color:var(--line);
+  padding:8px 0;
+  box-shadow:0 10px 30px -22px rgba(94,62,28,.4);
+}
+.header-inner{ display:flex; align-items:center; gap:18px; }
+.brand{ display:flex; align-items:center; gap:12px; flex:none; }
+.brand-img{ height:46px; width:auto; object-fit:contain; border-radius:12px; }
+.brand-name{
+  font-family:var(--font-serif); font-weight:700; font-size:1.22rem; line-height:1;
+  letter-spacing:.04em;
+}
+.brand-name small{ display:block; font-family:var(--font-sans); font-weight:700; font-size:.6rem; letter-spacing:.34em; color:var(--accent-deep); margin-top:5px; }
+.rating-badge{
+  display:inline-flex; align-items:center; gap:7px;
+  background:var(--accent-soft); color:var(--accent-deep);
+  padding:8px 16px; border-radius:var(--r-pill); flex:none;
+  font-weight:800; font-size:.85rem; letter-spacing:.02em;
+  border:1px solid rgba(165,131,95,.25);
+}
+.rating-badge .star{ color:var(--accent); font-size:.95rem; }
+.rating-badge .demo-tag{ padding:2px 7px; font-size:.56rem; letter-spacing:.1em; border-color:rgba(165,131,95,.45); }
+.header-nav{ display:flex; align-items:center; gap:26px; margin-left:auto; margin-right:8px; }
+.header-nav a{
+  font-size:.9rem; font-weight:600; color:var(--ink-soft);
+  position:relative; padding:4px 0; transition:color .2s ease;
+}
+.header-nav a::after{
+  content:""; position:absolute; left:0; bottom:0; height:2px; width:100%;
+  background:var(--accent); transform:scaleX(0); transform-origin:left; transition:transform .28s ease;
+}
+.header-nav a:hover{ color:var(--ink); }
+.header-nav a:hover::after{ transform:scaleX(1); }
+.header-cta{ flex:none; }
+
+/* Бургер */
+.burger{ display:none; flex-direction:column; gap:5px; padding:8px; margin-left:auto; flex:none; }
+.burger span{ width:22px; height:2px; background:var(--ink); border-radius:2px; transition:transform .3s ease, opacity .3s ease; }
+body.nav-open .burger span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+body.nav-open .burger span:nth-child(2){ opacity:0; }
+body.nav-open .burger span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+.mobile-menu{
+  position:fixed; inset:0 0 auto 0; z-index:80; padding-top:74px;
+  background:rgba(245,239,230,.9);
+  -webkit-backdrop-filter:blur(20px) saturate(1.3); backdrop-filter:blur(20px) saturate(1.3);
+  border-bottom:1px solid var(--line);
+  transform:translateY(-8px); opacity:0; pointer-events:none;
+  transition:opacity .3s ease, transform .3s ease;
+}
+body.nav-open .mobile-menu{ transform:none; opacity:1; pointer-events:auto; }
+.mobile-menu nav{ display:flex; flex-direction:column; padding:18px 0 28px; }
+.mobile-menu a{
+  padding:14px 4px; font-weight:700; font-size:1.05rem; border-bottom:1px solid var(--line);
+}
+.mobile-menu .btn{ margin-top:20px; }
+
+/* ============================================================
+   3. HERO
+   ============================================================ */
+.hero{ padding-top:clamp(96px, 14vw, 150px); padding-bottom:clamp(48px, 7vw, 90px); position:relative; overflow:hidden; }
+.hero .blob{ position:absolute; border-radius:50%; filter:blur(70px); opacity:.5; pointer-events:none; }
+.hero .blob--1{ width:460px; height:460px; background:#eee5e0; top:-120px; right:-120px; }
+.hero .blob--2{ width:420px; height:420px; background:#dfd3c8; bottom:-140px; left:-140px; opacity:.45; }
+.hero-grid{ display:grid; grid-template-columns:1.05fr .95fr; gap:clamp(30px, 5vw, 72px); align-items:center; }
+.hero-eyebrow{
+  display:inline-flex; align-items:center; gap:12px; padding:10px 18px;
+  border-radius:var(--r-pill); background:var(--accent-soft);
+  font-weight:700; font-size:.82rem; letter-spacing:.14em; text-transform:uppercase; color:var(--accent-deep);
+}
+.hero h1{
+  font-family:var(--font-serif); font-weight:600;
+  font-size:clamp(2.15rem, 5.2vw, 4.1rem); line-height:1.13; letter-spacing:.2px;
+  margin-top:22px;
+}
+.hero h1 em{ font-style:italic; color:var(--accent-deep); }
+.hero-sub{ margin-top:20px; max-width:520px; color:var(--ink-soft); font-size:clamp(1rem, 1.4vw, 1.12rem); }
+.hero-actions{ display:flex; flex-wrap:wrap; gap:14px; margin-top:34px; align-items:center; }
+.hero-note{ margin-top:18px; display:flex; align-items:center; gap:8px; color:var(--muted); font-size:.86rem; }
+.hero-note::before{ content:""; width:8px; height:8px; border-radius:50%; background:#86b98f; box-shadow:0 0 0 4px rgba(134,185,143,.25); flex:none; }
+.hero-avatars{ display:flex; align-items:center; margin-top:30px; gap:14px; }
+.hero-avatars .faces{ display:flex; }
+.hero-avatars .face{
+  width:38px; height:38px; border-radius:50%; border:2px solid var(--bg);
+  margin-left:-10px; background-size:cover; background-position:center;
+  box-shadow:var(--shadow-card);
+}
+.hero-avatars .faces .face:first-child{ margin-left:0; }
+.hero-avatars small{ font-size:.84rem; color:var(--muted); max-width:220px; }
+.hero-media{ position:relative; }
+.hero-media .ph-media{ aspect-ratio:4/5; box-shadow:var(--shadow-soft); }
+@keyframes float{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-10px);} }
+
+/* ============================================================
+   4. КАРТОЧКИ-БЛОКИ (возражения / польза / отличие)
+   ============================================================ */
+.cards-3{ display:grid; grid-template-columns:repeat(3, 1fr); gap:22px; }
+.card{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--r-lg);
+  padding:clamp(24px, 3vw, 34px); position:relative; overflow:hidden;
+  transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+}
+.card:hover{ transform:translateY(-6px); box-shadow:var(--shadow-card); border-color:rgba(165,131,95,.35); }
+.card .icon{
+  width:54px; height:54px; border-radius:18px; display:grid; place-items:center;
+  background:var(--accent-soft); color:var(--accent-deep); margin-bottom:20px;
+}
+.card h3{ font-family:var(--font-serif); font-size:1.22rem; font-weight:700; line-height:1.3; margin-bottom:10px; }
+.card p{ color:var(--ink-soft); font-size:.95rem; }
+.card .num{
+  position:absolute; top:20px; right:24px; font-family:var(--font-serif);
+  font-size:2.6rem; font-weight:700; color:rgba(47,38,28,.06); line-height:1;
+}
+.card--quote{ background:transparent; border-color:var(--line); }
+.card--quote blockquote{
+  font-family:var(--font-serif); font-size:1.14rem; line-height:1.5; color:var(--ink); font-style:normal;
+}
+.card--quote blockquote .qt{ color:var(--accent); font-family:var(--font-serif); font-size:1.6rem; line-height:0; display:inline-block; transform:translateY(6px); }
+.card--quote p{ margin-top:12px; font-size:.9rem; color:var(--muted); }
+
+/* ============================================================
+   5. КАТАЛОГ ЭФФЕКТОВ (табы)
+   ============================================================ */
+.tabs-bar{
+  display:flex; gap:10px; justify-content:center; flex-wrap:wrap;
+  margin-bottom:clamp(26px, 4vw, 40px);
+}
+.tab-btn{
+  padding:12px 24px; border-radius:var(--r-pill); font-weight:700; font-size:.92rem;
+  color:var(--ink-soft); border:1px solid var(--line-strong); background:var(--surface);
+  transition:all .25s ease; white-space:nowrap;
+}
+.tab-btn:hover{ border-color:var(--accent); color:var(--accent-deep); transform:translateY(-1px); }
+.tab-btn.active{ background:var(--ink); color:var(--cream); border-color:var(--ink); box-shadow:0 10px 24px -14px rgba(47,38,28,.6); }
+.tabs-panel{
+  display:grid; grid-template-columns:.9fr 1.1fr; gap:clamp(22px, 4vw, 44px); align-items:center;
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--r-xl);
+  padding:clamp(18px, 3vw, 30px);
+  box-shadow:var(--shadow-card);
+}
+.tabs-media{ aspect-ratio:4/5; }
+.fx{ animation:fxIn .5s cubic-bezier(.2,.6,.2,1); }
+@keyframes fxIn{ from{ opacity:0; transform:translateY(14px);} to{ opacity:1; transform:none;} }
+.tabs-info{ padding:clamp(6px, 2vw, 20px); }
+.tabs-info .tag{
+  display:inline-block; padding:7px 14px; border-radius:var(--r-pill);
+  background:var(--accent-soft); color:var(--accent-deep); font-weight:700; font-size:.74rem;
+  letter-spacing:.12em; text-transform:uppercase; margin-bottom:16px;
+}
+.tabs-info h3{ font-family:var(--font-serif); font-size:clamp(1.7rem, 3.4vw, 2.5rem); font-weight:700; line-height:1.15; }
+.tabs-info p.desc{ margin-top:14px; color:var(--ink-soft); font-size:1.03rem; max-width:440px; }
+.price{
+  display:inline-flex; align-items:baseline; gap:10px; margin-top:22px;
+  background:var(--accent-soft); padding:12px 20px; border-radius:18px;
+}
+.price span{ font-size:.8rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+.price b{ font-family:var(--font-serif); font-size:1.35rem; color:var(--accent-deep); }
+.tabs-info .btn{ margin-top:26px; }
+.tabs-info .hint{ margin-top:18px; font-size:.9rem; color:var(--muted); }
+
+/* Лента-призыв после каталога */
+.cta-strip{
+  margin-top:clamp(40px, 6vw, 64px);
+  padding:clamp(30px, 5vw, 56px);
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--r-xl);
+  display:flex; gap:28px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+}
+.cta-strip h3{ font-family:var(--font-serif); font-size:clamp(1.35rem, 2.6vw, 1.85rem); font-weight:700; line-height:1.25; }
+.cta-strip p{ color:var(--ink-soft); margin-top:10px; max-width:620px; font-size:.97rem; }
+.cta-strip .btn{ flex:none; }
+
+/* ============================================================
+   6. СВОБОДНЫЕ ОКНА
+   ============================================================ */
+.schedule{
+  background:linear-gradient(140deg, #6a4f3e 0%, #9a6f58 55%, #b8826a 100%);
+  border-radius:var(--r-xl); position:relative; overflow:hidden;
+  padding:clamp(40px, 7vw, 80px) clamp(24px, 4vw, 60px);
+  text-align:center; color:var(--cream);
+}
+.schedule::before, .schedule::after{
+  content:""; position:absolute; border-radius:50%; background:rgba(255,247,234,.14); pointer-events:none;
+}
+.schedule::before{ width:300px; height:300px; top:-120px; right:-80px; }
+.schedule::after{ width:240px; height:240px; bottom:-120px; left:-60px; }
+.schedule .s-eyebrow{ color:rgba(255,247,234,.8); }
+.schedule .s-eyebrow::before, .schedule .s-eyebrow::after{ background:rgba(255,247,234,.6); }
+.schedule h2{ color:var(--cream); }
+.schedule .s-sub{ color:rgba(255,247,234,.82); margin-bottom:34px; }
+.schedule .btn--light{ margin-inline:auto; }
+.schedule .note{ margin-top:18px; font-size:.83rem; color:rgba(255,247,234,.65); }
+
+/* ============================================================
+   7. ПОРТФОЛИО (горизонтальная лента)
+   ============================================================ */
+.g-shell{ position:relative; }
+.h-scroll{
+  display:flex; gap:20px; overflow-x:auto; scroll-snap-type:x proximity;
+  padding:10px 6px 30px; margin-inline:-6px;
+  scrollbar-width:none; -ms-overflow-style:none;
+  cursor:grab;
+}
+.h-scroll::-webkit-scrollbar{ display:none; }
+.h-scroll::-webkit-scrollbar-track{ background:transparent; }
+.h-scroll::-webkit-scrollbar-thumb{ background:transparent; }
+.h-scroll > *{ scroll-snap-align:center; }
+.h-scroll.is-dragging{ cursor:grabbing; scroll-snap-type:none; user-select:none; -webkit-user-select:none; }
+.h-scroll.is-dragging .work-item{ transform:none !important; }
+.g-nav{
+  position:absolute; top:calc(50% - 15px); transform:translateY(-50%); z-index:6;
+  width:46px; height:46px; border-radius:50%;
+  display:grid; place-items:center;
+  background:var(--surface); border:1px solid var(--line-strong);
+  color:var(--ink); box-shadow:var(--shadow-card);
+  opacity:0; pointer-events:none;
+  transition:opacity .3s ease, background-color .25s ease, color .25s ease, transform .25s ease;
+  cursor:pointer;
+}
+.g-nav--prev{ left:-14px; }
+.g-nav--next{ right:-14px; }
+.g-shell:hover .g-nav, .g-nav:focus-visible{ opacity:1; pointer-events:auto; }
+.g-nav:hover{ background:var(--accent); color:#fff; border-color:var(--accent); transform:translateY(-50%) scale(1.06); }
+.g-nav:disabled{ opacity:0; pointer-events:none; }
+.work-item{
+  flex:0 0 clamp(230px, 42vw, 330px);
+  aspect-ratio:3/4; border-radius:var(--r-lg); position:relative; overflow:hidden;
+  box-shadow:var(--shadow-card); isolation:isolate;
+  transition:transform .3s ease;
+}
+.work-item:hover{ transform:translateY(-6px) rotate(-.4deg); }
+.work-item .ph-media{ position:absolute; inset:0; border-radius:0; }
+.work-item .ph-media::after{ border-radius:0; }
+.work-item video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.work-item .chip{
+  position:absolute; left:14px; bottom:14px; z-index:2;
+  padding:9px 16px; border-radius:var(--r-pill); font-weight:700; font-size:.8rem;
+  color:var(--ink); background:rgba(255,250,241,.85);
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.6);
+  transition:transform .3s ease;
+}
+.work-item .play{
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:2;
+  width:62px; height:62px; border-radius:50%; display:grid; place-items:center;
+  background:rgba(255,250,241,.88); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+  box-shadow:var(--shadow-card); color:var(--accent-deep);
+  border:1px solid rgba(255,255,255,.6);
+  transition:transform .3s ease;
+}
+.work-item:hover .play{ transform:translate(-50%,-50%) scale(1.08); }
+.scroll-edge{ pointer-events:none; }
+
+/* ============================================================
+   8. ПРОЦЕДУРА
+   ============================================================ */
+.steps{ display:grid; grid-template-columns:repeat(4,1fr); gap:20px; counter-reset:step; }
+.step{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--r-lg);
+  padding:clamp(22px, 3vw, 30px); position:relative; overflow:hidden;
+  transition:transform .3s ease, box-shadow .3s ease;
+}
+.step:hover{ transform:translateY(-6px); box-shadow:var(--shadow-card); }
+.step::before{
+  content:"0" counter(step); counter-increment:step;
+  font-family:var(--font-serif); font-size:2.4rem; font-weight:700; line-height:1;
+  color:rgba(165,131,95,.35); display:block; margin-bottom:16px;
+}
+.step h3{ font-size:1.08rem; font-weight:800; margin-bottom:8px; }
+.step p{ font-size:.92rem; color:var(--muted); }
+
+/* ============================================================
+   9. ОТЗЫВЫ + МОДАЛКА
+   ============================================================ */
+.reviews-row{ display:flex; gap:20px; overflow-x:auto; scroll-snap-type:x proximity; padding:10px 6px 30px; scrollbar-width:none; cursor:grab; }
+.reviews-row::-webkit-scrollbar{ display:none; }
+.reviews-row.is-dragging{ cursor:grabbing; scroll-snap-type:none; user-select:none; -webkit-user-select:none; }
+.reviews-row.is-dragging .review-card{ transform:none !important; }
+.review-card{
+  flex:0 0 clamp(280px, 54vw, 380px); scroll-snap-align:center;
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--r-lg);
+  padding:26px; display:flex; flex-direction:column; gap:14px;
+  box-shadow:var(--shadow-card); transition:transform .3s ease;
+}
+.review-card:hover{ transform:translateY(-6px); }
+.review-stars{ color:var(--star); letter-spacing:3px; font-size:.95rem; }
+.review-card .who{ display:flex; align-items:center; gap:12px; }
+.review-card .who .ava{
+  width:42px; height:42px; border-radius:50%; display:grid; place-items:center;
+  background:var(--accent-soft); color:var(--accent-deep); font-weight:800; font-size:.95rem; flex:none;
+}
+.review-card .who b{ font-size:.95rem; display:block; line-height:1.2; }
+.review-card .who small{ color:var(--muted); font-size:.8rem; }
+.review-text{ color:var(--ink-soft); font-size:.94rem; line-height:1.65; }
+.review-card .more{
+  margin-top:auto; align-self:flex-start; font-weight:700; font-size:.88rem;
+  color:var(--accent-deep); border-bottom:1px dashed rgba(124,95,64,.4);
+  padding-bottom:2px; transition:border-color .2s ease, color .2s ease;
+}
+.review-card .more:hover{ border-bottom-style:solid; color:var(--accent); }
+
+.modal{
+  position:fixed; inset:0; z-index:200; display:grid; place-items:center; padding:20px;
+  background:rgba(43,35,25,.45);
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+  opacity:0; pointer-events:none; transition:opacity .3s ease;
+}
+.modal.open{ opacity:1; pointer-events:auto; }
+.modal-card{
+  width:min(600px, 100%); max-height:min(78vh, 640px); overflow:auto;
+  background:var(--surface); border-radius:var(--r-lg); border:1px solid var(--line);
+  padding:clamp(24px, 4vw, 38px); position:relative;
+  transform:translateY(16px) scale(.98); transition:transform .3s cubic-bezier(.2,.7,.3,1);
+}
+.modal.open .modal-card{ transform:none; }
+.modal-close{
+  position:absolute; top:16px; right:16px; width:38px; height:38px; border-radius:50%;
+  display:grid; place-items:center; background:var(--accent-soft); color:var(--accent-deep);
+  font-size:1.1rem; transition:transform .25s ease, background-color .25s ease;
+}
+.modal-close:hover{ transform:rotate(90deg); background:var(--accent); color:#fff; }
+.modal-stars{ color:var(--star); letter-spacing:3px; font-size:1rem; margin-bottom:14px; }
+.modal-card h3{ font-family:var(--font-serif); font-size:1.35rem; margin-bottom:6px; }
+.modal-card .who-sub{ color:var(--muted); font-size:.85rem; margin-bottom:18px; }
+.modal-card article{ color:var(--ink-soft); line-height:1.75; font-size:.97rem; white-space:pre-line; }
+
+/* ============================================================
+   9.1 ФОРМА ОНЛАЙН-ЗАПИСИ (модальное окно)
+   ============================================================ */
+body.no-scroll{ overflow:hidden; }
+.booking-card{ width:min(560px, 100%); padding:clamp(26px, 5vw, 42px); }
+.booking-modal .modal-card{ transform:translateY(18px) scale(.98); transition:transform .35s cubic-bezier(.2,.7,.3,1); }
+.booking-modal.open .modal-card{ transform:none; }
+.booking-title{ font-family:var(--font-serif); font-size:clamp(1.4rem, 4vw, 1.75rem); font-weight:700; line-height:1.2; padding-right:34px; }
+.booking-sub{ color:var(--muted); font-size:.95rem; margin:8px 0 clamp(18px, 3vw, 24px); }
+.booking-form{ display:flex; flex-direction:column; gap:clamp(16px, 3vw, 20px); }
+.booking-grid{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(12px, 2.4vw, 16px); }
+.field{ display:flex; flex-direction:column; gap:7px; min-width:0; }
+.field-label{ font-size:.86rem; font-weight:700; color:var(--ink-soft); line-height:1.4; }
+.field-label .req{ color:var(--accent-deep); }
+.field-label .optional{ font-weight:600; color:var(--muted); font-size:.76rem; margin-left:6px; }
+.field input[type="text"], .field input[type="tel"], .field input[type="date"],
+.field select, .field textarea{
+  width:100%; padding:13px 16px; border-radius:16px;
+  border:1px solid var(--line-strong); background:var(--bg-soft); color:var(--ink);
+  font-family:var(--font-sans); font-size:.95rem; line-height:1.4;
+  transition:border-color .25s ease, box-shadow .25s ease, background-color .25s ease;
+}
+.field textarea{ resize:vertical; min-height:84px; }
+.field select{
+  appearance:none; -webkit-appearance:none; padding-right:44px; cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a4705a' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 16px center;
+}
+.field select:invalid{ color:var(--muted); }
+.field input[type="date"]{ min-height:48px; }
+.field input::placeholder, .field textarea::placeholder{ color:rgba(43,33,23,.4); }
+.field input:focus, .field select:focus, .field textarea:focus{
+  outline:none; border-color:var(--accent); background:var(--surface);
+  box-shadow:0 0 0 4px var(--accent-soft);
+}
+.field.has-error input, .field.has-error select, .field.has-error textarea{ border-color:#c4554d; }
+.field-error{ color:#b04a42; font-size:.78rem; font-weight:600; min-height:0; }
+.field.has-error .field-error{ min-height:1em; }
+.field-error:empty{ display:none; }
+
+.field-check{ flex-direction:row; align-items:flex-start; gap:12px; }
+.field-check input[type="checkbox"]{
+  flex:none; width:20px; height:20px; margin-top:2px;
+  accent-color:var(--accent); cursor:pointer;
+}
+.field-label--check{ font-weight:600; font-size:.87rem; color:var(--ink-soft); cursor:pointer; }
+.policy-link{ color:var(--accent-deep); font-weight:700; text-decoration:underline; text-underline-offset:3px; }
+.policy-link:hover{ color:var(--accent); }
+
+.booking-submit{ width:100%; }
+.booking-error{
+  display:none; text-align:center; color:#a43732; font-size:.9rem; font-weight:600;
+  padding:10px 14px; border-radius:14px; background:#fbeaea; margin:2px 0 14px;
+}
+.booking-error[hidden]{ display:none; }
+.booking-error:not([hidden]){ display:block; }
+.booking-note{ text-align:center; color:var(--muted); font-size:.86rem; margin-top:-6px; }
+
+.booking-success{ text-align:center; padding:clamp(16px, 3vw, 30px) 0; display:flex; flex-direction:column; align-items:center; gap:6px; }
+.booking-success[hidden]{ display:none; }
+.booking-ok{
+  width:74px; height:74px; border-radius:50%; display:grid; place-items:center;
+  background:var(--accent-soft); color:var(--accent-deep); margin-bottom:16px;
+  animation:popIn .5s cubic-bezier(.2,.7,.3,1);
+}
+.booking-success .btn{ margin-top:22px; }
+@keyframes popIn{ from{ transform:scale(.5); opacity:0; } to{ transform:scale(1); opacity:1; } }
+@media (max-width: 480px){
+  .booking-grid{ grid-template-columns:1fr; }
+}
+
+/* ============================================================
+   10. ОБО МНЕ
+   ============================================================ */
+.about-grid{ display:grid; grid-template-columns:.92fr 1.08fr; gap:clamp(28px, 5vw, 64px); align-items:center; }
+.about-media{ position:relative; }
+.about-media .ph-media{ aspect-ratio:4/5; box-shadow:var(--shadow-soft); }
+.about-media .exp-card{
+  position:absolute; right:-18px; bottom:30px; padding:18px 24px; border-radius:22px;
+  box-shadow:var(--shadow-card); text-align:center; animation:float 7s ease-in-out infinite;
+}
+.about-media .exp-card b{ font-family:var(--font-serif); font-size:1.5rem; color:var(--accent-deep); display:block; line-height:1; }
+.about-media .exp-card small{ font-size:.78rem; color:var(--muted); margin-top:6px; display:block; }
+.about-info h2{ font-family:var(--font-serif); font-size:clamp(1.8rem, 3.6vw, 2.6rem); font-weight:700; line-height:1.15; }
+.about-info .name{ color:var(--accent-deep); font-family:var(--font-serif); font-size:1.3rem; font-style:italic; margin-top:6px; }
+.about-info .bio{ margin:18px 0 24px; color:var(--ink-soft); }
+.about-info .bio ul{ list-style:none; margin-top:14px; display:grid; gap:10px; }
+.about-info .bio li{ position:relative; padding-left:28px; font-size:.95rem; }
+.about-info .bio li::before{
+  content:""; position:absolute; left:0; top:7px; width:16px; height:16px; border-radius:50%;
+  background:var(--accent-soft); border:1px solid rgba(165,131,95,.4);
+}
+.about-line{ color:var(--muted); font-size:.95rem; margin-bottom:18px; }
+.soc-row{ display:flex; flex-wrap:wrap; gap:12px; }
+
+.soc{
+  display:inline-flex; align-items:center; gap:10px; padding:12px 22px; border-radius:var(--r-pill);
+  border:1px solid var(--line-strong); background:var(--surface); font-weight:700; font-size:.92rem;
+  color:var(--ink);
+  transition:all .25s ease;
+}
+.soc .soc-ico{
+  width:26px; height:26px; border-radius:50%; display:grid; place-items:center;
+  font-size:.72rem; font-weight:800; color:#fff; flex:none;
+}
+.soc:hover{ transform:translateY(-2px); box-shadow:var(--shadow-card); }
+.soc--wa .soc-ico{ background:#54b789; }
+.soc--wa:hover{ border-color:#54b789; color:#2e7d57; }
+.soc--tg .soc-ico{ background:#3aa8e0; }
+.soc--tg:hover{ border-color:#3aa8e0; color:#2276a8; }
+.soc--vk .soc-ico{ background:#4c75a3; }
+.soc--vk:hover{ border-color:#4c75a3; color:#33597f; }
+
+/* ============================================================
+   11. ГДЕ НАХОДИМСЯ
+   ============================================================ */
+.where-grid{ display:grid; grid-template-columns:1.05fr .95fr; gap:clamp(28px, 5vw, 64px); align-items:stretch; }
+.where-info{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--r-xl);
+  padding:clamp(26px, 4vw, 44px); display:flex; flex-direction:column; justify-content:center;
+}
+.where-info .pin{
+  width:60px; height:60px; border-radius:20px; background:var(--accent-soft); color:var(--accent-deep);
+  display:grid; place-items:center; margin-bottom:22px;
+}
+.where-info h2{ font-family:var(--font-serif); font-size:clamp(1.7rem, 3.2vw, 2.4rem); font-weight:700; line-height:1.15; }
+.where-info p{ margin-top:14px; color:var(--ink-soft); font-size:1.02rem; }
+.where-info .addr{
+  margin-top:14px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; color:var(--muted); font-size:.92rem;
+}
+.where-info .chip-note{
+  display:inline-flex; align-items:center; gap:8px; margin-top:24px; align-self:flex-start;
+  padding:10px 18px; border-radius:var(--r-pill); background:var(--accent-soft);
+  color:var(--accent-deep); font-weight:700; font-size:.86rem;
+}
+.where-media .ph-media{ height:100%; min-height:380px; box-shadow:var(--shadow-soft); }
+
+/* ============================================================
+   12. FAQ
+   ============================================================ */
+.faq{ max-width:780px; margin-inline:auto; }
+.faq-item{ border-bottom:1px solid var(--line); }
+.faq-item:first-child{ border-top:1px solid var(--line); }
+.faq-q{
+  width:100%; display:flex; align-items:center; justify-content:space-between; gap:20px;
+  padding:22px 6px; text-align:left; font-weight:700; font-size:clamp(1rem, 1.6vw, 1.1rem);
+  transition:color .25s ease; line-height:1.4;
+}
+.faq-q:hover{ color:var(--accent-deep); }
+.faq-ico{
+  flex:none; width:30px; height:30px; border-radius:50%; position:relative;
+  background:var(--accent-soft); transition:transform .35s ease, background-color .35s ease;
+}
+.faq-ico::before, .faq-ico::after{
+  content:""; position:absolute; top:50%; left:50%; background:var(--accent-deep);
+  transform:translate(-50%,-50%); border-radius:2px; transition:transform .3s ease;
+}
+.faq-ico::before{ width:12px; height:2px; }
+.faq-ico::after{ width:2px; height:12px; }
+.faq-item.open .faq-ico{ transform:rotate(135deg); background:var(--accent); }
+.faq-item.open .faq-ico::before, .faq-item.open .faq-ico::after{ background:#fff; }
+.faq-a{ display:grid; grid-template-rows:0fr; transition:grid-template-rows .4s cubic-bezier(.4,0,.2,1); }
+.faq-item.open .faq-a{ grid-template-rows:1fr; }
+.faq-a > div{ overflow:hidden; }
+.faq-a p{ padding:0 6px 24px; color:var(--ink-soft); font-size:.97rem; max-width:660px; }
+
+/* ============================================================
+   13. ПАМЯТКА
+   ============================================================ */
+.memo{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--r-xl);
+  padding:clamp(28px, 5vw, 60px); position:relative; overflow:hidden;
+  display:grid; grid-template-columns:.85fr 1.15fr; gap:clamp(24px, 4vw, 56px); align-items:center;
+}
+.memo::before{
+  content:""; position:absolute; width:260px; height:260px; border-radius:50%;
+  background:var(--accent-soft); top:-90px; left:-90px; filter:blur(20px); opacity:.55; pointer-events:none;
+}
+.memo h2{ font-family:var(--font-serif); font-size:clamp(1.7rem, 3.4vw, 2.5rem); font-weight:700; line-height:1.15; }
+.memo .lead{ margin-top:14px; color:var(--ink-soft); }
+.memo .memo-note{ margin-top:22px; display:inline-flex; align-items:center; gap:10px; font-size:.9rem; color:var(--muted); }
+.memo-list{ list-style:none; display:grid; gap:12px; }
+.memo-list li{
+  display:flex; gap:14px; align-items:flex-start; padding:16px 18px;
+  background:var(--bg-soft); border:1px solid var(--line); border-radius:18px;
+  font-size:.95rem; color:var(--ink-soft);
+  transition:transform .25s ease, border-color .25s ease;
+}
+.memo-list li:hover{ transform:translateX(4px); border-color:rgba(165,131,95,.4); }
+.memo-list .ok{
+  flex:none; width:24px; height:24px; border-radius:50%; margin-top:1px;
+  background:var(--accent); color:#fff; display:grid; place-items:center; font-size:.72rem;
+}
+
+/* ============================================================
+   14. ФИНАЛЬНЫЙ ПРИЗЫВ + ПОДВАЛ
+   ============================================================ */
+.final{
+  background:linear-gradient(150deg, #f1e8dd, #f8f1e8);
+  border:1px solid var(--line); border-radius:var(--r-xl);
+  padding:clamp(42px, 7vw, 84px) clamp(24px, 5vw, 64px);
+  text-align:center; position:relative; overflow:hidden;
+}
+.final::after{
+  content:""; position:absolute; width:320px; height:320px; border-radius:50%;
+  background:rgba(165,131,95,.16); bottom:-160px; right:-80px; pointer-events:none;
+}
+.final h2{ font-family:var(--font-serif); font-size:clamp(1.9rem, 4.4vw, 3.2rem); font-weight:700; line-height:1.15; }
+.final p{ color:var(--ink-soft); max-width:560px; margin:18px auto 32px; font-size:1.02rem; }
+.final .btn{ margin-inline:auto; }
+.final .final-note{ margin-top:22px; color:var(--muted); font-size:.92rem; }
+
+.footer{ background:var(--dark); color:rgba(255,247,234,.85); margin-top:clamp(56px, 8vw, 96px); }
+.footer a{ transition:color .2s ease; }
+.footer a:hover{ color:#fff; }
+/* Таблетки соцсетей светлые — в подвале текст держим тёмным,
+   иначе он сливается с подложкой и с общим цветом подвала */
+.footer .soc, .footer .soc:hover{ color:var(--ink); }
+.footer-top{
+  display:grid; grid-template-columns:1.2fr 1fr 1.4fr; gap:clamp(28px, 4vw, 56px);
+  padding:clamp(44px, 6vw, 72px) 0 clamp(30px, 4vw, 40px);
+}
+.footer .brand-name{ color:var(--cream); }
+/* Логотип на тёмном фоне: без инверсии (она даёт белый квадрат),
+   круглая «медалька» с тонким светлым кольцом */
+.footer .brand-img{
+  border-radius:50%;
+  box-shadow:0 0 0 1px rgba(255,247,234,.35), 0 14px 30px -18px rgba(0,0,0,.9);
+}
+.footer .about-line{ color:rgba(255,247,234,.6); margin-top:16px; max-width:320px; font-size:.92rem; }
+.footer h4{ font-size:.82rem; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:var(--cream); margin-bottom:18px; }
+.footer-nav{ list-style:none; display:grid; gap:11px; font-size:.94rem; }
+.footer-links{ display:grid; gap:11px; font-size:.94rem; }
+.fp-badge{
+  display:inline-flex; align-items:center; gap:12px; width:100%; text-align:left;
+  background:rgba(255,247,234,.06); border:1px solid rgba(255,247,234,.16);
+  border-radius:22px; padding:20px; transition:border-color .3s ease, background-color .3s ease, transform .3s ease;
+  margin-bottom:14px;
+}
+.fp-badge:hover{ border-color:rgba(165,131,95,.6); background:rgba(255,247,234,.1); transform:translateY(-3px); }
+.fp-badge .gift{
+  flex:none; width:46px; height:46px; border-radius:16px; display:grid; place-items:center;
+  background:var(--accent); color:#fff;
+}
+.fp-badge b{ color:var(--cream); display:block; font-size:.98rem; line-height:1.3; }
+.fp-badge small{ color:rgba(255,247,234,.6); font-size:.82rem; margin-top:4px; display:block; }
+.footer-bottom{
+  border-top:1px solid rgba(255,247,234,.14); padding:22px 0;
+  display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap;
+  font-size:.82rem; color:rgba(255,247,234,.5);
+}
+
+/* ============================================================
+   15. АДАПТИВНОСТЬ
+   ============================================================ */
+@media (max-width: 1024px){
+  .header-nav{ display:none; }
+  .burger{ display:flex; }
+  .hero-grid, .about-grid, .where-grid{ grid-template-columns:1fr; }
+  .hero-media{ max-width:520px; margin-inline:auto; width:100%; }
+  .steps{ grid-template-columns:repeat(2,1fr); }
+  .memo{ grid-template-columns:1fr; }
+  .g-nav{ display:none; }
+  .h-scroll, .reviews-row{ cursor:grab; }
+}
+@media (max-width: 760px){
+  .cards-3{ grid-template-columns:1fr; }
+  .tabs-panel{ grid-template-columns:1fr; }
+  .tabs-media{ max-width:420px; margin-inline:auto; width:100%; }
+  .tabs-bar{ justify-content:flex-start; flex-wrap:nowrap; overflow-x:auto; padding-bottom:8px; scrollbar-width:none; }
+  .tabs-bar::-webkit-scrollbar{ display:none; }
+  .footer-top{ grid-template-columns:1fr; gap:36px; }
+  .header-cta .btn{ padding:12px 18px; font-size:.86rem; }
+  .rating-badge{ display:none; }
+  .hero-avatars{ margin-top:22px; }
+}
+@media (max-width: 480px){
+  .container{ width:calc(100% - 32px); }
+  .btn{ padding:14px 24px; }
+  .steps{ grid-template-columns:1fr; }
+  .tabs-actions .btn{ width:100%; }
+  .soc{ flex:1 1 calc(50% - 6px); justify-content:center; padding:12px 10px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ============================================================
+     ШАПКА
+     ЗАМЕНИТЕ: logo.png в папке Screenshorts; название студии в .brand-name
+     ============================================================ -->
+<header class="header" id="header">
+  <div class="container header-inner">
+    <a class="brand" href="#hero" aria-label="На главную">
+      <img class="brand-img" src="Screenshorts/logo.png" alt="Логотип студии" onerror="this.hidden=true;">
+      <span class="brand-name">LASH STUDIO<small>наращивание ресниц</small></span>
+    </a>
+
+    <span class="rating-badge" title="Демонстрационный рейтинг студии"><span class="star">★</span> 4.9 <span class="demo-tag">демо</span></span>
+
+    <nav class="header-nav" aria-label="Основная навигация">
+      <a href="#effects">Каталог</a>
+      <a href="#schedule">Свободные окна</a>
+      <a href="#work">Работы</a>
+      <a href="#reviews">Отзывы</a>
+      <a href="#about">Обо мне</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+
+    <a class="btn btn--primary btn--sm header-cta js-booking" href="#schedule">Записаться</a>
+
+    <button class="burger" id="burger" aria-label="Открыть меню" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- Мобильное меню -->
+<div class="mobile-menu" id="mobileMenu">
+  <div class="container">
+    <nav aria-label="Мобильная навигация">
+      <a href="#effects">Каталог эффектов</a>
+      <a href="#schedule">Свободные окна</a>
+      <a href="#work">Мои работы</a>
+      <a href="#reviews">Отзывы</a>
+      <a href="#about">Обо мне</a>
+      <a href="#where">Где находимся</a>
+      <a href="#contacts">Контакты</a>
+      <a class="btn btn--primary" href="#schedule">Посмотреть свободное время</a>
+    </nav>
+  </div>
+</div>
+
+<main>
+
+  <!-- ============================================================
+       HERO — ЗАМЕНИТЕ: крупное фото в #heroMedia (задаётся в JS, блок CONFIG)
+       ============================================================ -->
+  <section class="hero" id="hero">
+    <div class="blob blob--1"></div>
+    <div class="blob blob--2"></div>
+    <div class="container">
+      <div class="hero-grid">
+        <div class="reveal">
+          <span class="hero-eyebrow">Студия наращивания ресниц</span>
+          <h1>Ресницы, которые подчёркивают <em>взгляд</em>, а не перегружают его</h1>
+          <p class="hero-sub">Подберём эффект под ваши глаза и желаемый результат — от естественной Классики до выразительного 3D.</p>
+          <div class="hero-actions">
+            <a class="btn btn--accent js-booking" href="#schedule">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              Записаться
+            </a>
+          </div>
+          <div class="hero-avatars">
+            <div class="faces" id="heroFaces"></div>
+            <small><span class="demo-tag">демо</span> показатели: более <b>200</b> довольных работ · рейтинг <b>★ 4.9</b></small>
+          </div>
+        </div>
+        <div class="hero-media reveal" style="--d:.15s">
+          <div class="ph-media" id="heroMedia" role="img" aria-label="Фото работы мастера"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       «ЗНАКОМО?» — возражения
+       ============================================================ -->
+  <section class="section">
+    <div class="container">
+      <div class="s-head reveal">
+        <span class="s-eyebrow">Знакомо?</span>
+        <h2 class="s-title">Три причины, по которым часто откладывают наращивание</h2>
+      </div>
+      <div class="cards-3">
+        <article class="card card--quote reveal">
+          <blockquote><span class="qt">&ldquo;</span>Боюсь, что ресницы будут выглядеть слишком&nbsp;искусственно</blockquote>
+          <p>Хочется сделать взгляд выразительнее, но не получить слишком тяжёлый объём, который меняет лицо и не подходит вашему стилю.</p>
+        </article>
+        <article class="card card--quote reveal" style="--d:.1s">
+          <blockquote><span class="qt">&ldquo;</span>Смотрю на Классику, 1,5D, 2D и не понимаю разницы</blockquote>
+          <p>По названиям сложно представить результат — и есть риск выбрать эффект, который окажется совсем не таким, как вы ожидали.</p>
+        </article>
+        <article class="card card--quote reveal" style="--d:.2s">
+          <blockquote><span class="qt">&ldquo;</span>Хочу меньше времени тратить на макияж глаз</blockquote>
+          <p>Тушь, подкручивание и попытки сделать ресницы одинаковыми каждое утро отнимают время, которое хочется потратить на что-то другое.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       «ВЫ ЗАРАНЕЕ ПОНИМАЕТЕ, КАКОЙ РЕЗУЛЬТАТ ПОЛУЧИТЕ»
+       ============================================================ -->
+  <section class="section section--soft">
+    <div class="container">
+      <div class="s-head reveal">
+        <span class="s-eyebrow">Результат понятен до записи</span>
+        <h2 class="s-title">Вы заранее понимаете, какой результат получите</h2>
+      </div>
+      <div class="cards-3">
+        <article class="card reveal">
+          <span class="num">01</span>
+          <div class="icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <h3>Подбираем эффект под желаемый результат</h3>
+          <p>Вы получаете именно ту степень выразительности, которую хотите: от естественной до более заметной.</p>
+        </article>
+        <article class="card reveal" style="--d:.1s">
+          <span class="num">02</span>
+          <div class="icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+          </div>
+          <h3>Показываем разницу между эффектами на реальных работах</h3>
+          <p>Вы можете сравнить Классику, Мокрый эффект, 1,5D, 2D и 3D до записи.</p>
+        </article>
+        <article class="card reveal" style="--d:.2s">
+          <span class="num">03</span>
+          <div class="icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c.7 2.5-1.5 4-3.6 4.6C6.4 8.2 4.3 10.1 4.3 13A7.7 7.7 0 0 0 12 20.7 7.7 7.7 0 0 0 19.7 13c0-5.5-4-8.4-7.7-10Z"/><path d="M12 6c1 1.8-.6 3.2-2 3.8"/></svg>
+          </div>
+          <h3>Создаём готовый акцент на глазах</h3>
+          <p>Вам не нужно каждое утро добиваться выразительности с помощью туши.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       «ЧЕМ ОТЛИЧАЕМСЯ»
+       ============================================================ -->
+  <section class="section">
+    <div class="container">
+      <div class="s-head reveal">
+        <span class="s-eyebrow">Почему выбирают нас</span>
+        <h2 class="s-title">Чем отличаемся</h2>
+      </div>
+      <div class="cards-3">
+        <article class="card reveal">
+          <span class="num">01</span>
+          <div class="icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+          </div>
+          <h3>Эффект под ваш образ</h3>
+          <p>Сначала определяем, какой результат вы хотите видеть в зеркале: максимально естественный, более яркий или объёмный.</p>
+        </article>
+        <article class="card reveal" style="--d:.1s">
+          <span class="num">02</span>
+          <div class="icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><path d="M13 7h.01M9 13l2.5-2.5L13 12l2-2 4 4"/></svg>
+          </div>
+          <h3>Можно посмотреть результат заранее</h3>
+          <p>В каталоге собраны разные эффекты с фотографиями работ — сравните варианты и выберите тот, который вам ближе.</p>
+        </article>
+        <article class="card reveal" style="--d:.2s">
+          <span class="num">03</span>
+          <div class="icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3Z"/><path d="m10 10 3-2v6l-3-2"/></svg>
+          </div>
+          <h3>От Классики до 3D</h3>
+          <p>Не нужно разбираться в профессиональных названиях. Покажите, какой результат вам нравится, — подходящий вариант можно подобрать вместе.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       КАТАЛОГ ЭФФЕКТОВ (табы) — контент в JS, блок CONFIG -> EFFECTS
+       ============================================================ -->
+  <section class="section section--soft" id="effects">
+    <div class="container">
+      <div class="s-head reveal">
+        <span class="s-eyebrow">Каталог эффектов</span>
+        <h2 class="s-title">Выберите свой эффект</h2>
+        <p class="s-sub">Переключайте вкладки и сравнивайте варианты — с фото и описанием. Стоимость каждого эффекта указывается по запросу.</p>
+      </div>
+
+      <div class="tabs-bar reveal" id="tabsBar" role="tablist" aria-label="Эффекты наращивания"></div>
+
+      <div class="tabs-panel reveal" id="tabsPanel"></div>
+
+      <!-- Призыв после каталога -->
+      <div class="cta-strip reveal">
+        <div>
+          <h3>Выберите ресницы, с которыми вам понравится ваш взгляд</h3>
+          <p>Классика — для более естественного результата. Мокрый эффект — для подчёркнутых, заметных лучиков. 1,5D / 2D / 3D — несколько вариантов объёма, чтобы выбрать нужную выразительность. Стоимость каждого варианта — по запросу: напишите мастеру, и вам сообщат цену под выбранный эффект.</p>
+        </div>
+<a class="btn btn--primary js-booking" href="#schedule">Посмотреть свободное время</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       СВОБОДНЫЕ ОКНА
+       ============================================================ -->
+  <section class="section" id="schedule">
+    <div class="container">
+      <div class="schedule reveal">
+        <span class="s-eyebrow">Свободные окна</span>
+        <h2 class="s-title">Найдите удобное время для записи</h2>
+        <p class="s-sub">Выберите подходящее свободное окно и запишитесь на наращивание.</p>
+        <a class="btn btn--light js-booking" href="#schedule">
+          Посмотреть свободное время
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <p class="note">Количество свободных окон зависит от текущей записи мастера.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       ПОРТФОЛИО — контент в JS, блок CONFIG -> WORKS
+       Добавьте реальные фото/видео: укажите путь в src (например "media/work-1.webp")
+       ============================================================ -->
+  <section class="section section--soft" id="work">
+    <div class="container">
+      <div class="s-head reveal">
+        <span class="s-eyebrow">Портфолио</span>
+        <h2 class="s-title">Мои работы</h2>
+        <p class="s-sub">Посмотрите, как разные эффекты выглядят на ресницах. В портфолио можно сравнить естественные и более выразительные варианты и найти результат, который хочется показать мастеру перед процедурой.</p>
+      </div>
+      <div class="g-shell reveal">
+        <div class="h-scroll" id="portfolioGallery" tabindex="0" aria-label="Галерея работ — прокручивается горизонтально"></div>
+        <button class="g-nav g-nav--prev" type="button" aria-label="Листать влево">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="g-nav g-nav--next" type="button" aria-label="Листать вправо">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       КАК ПРОХОДИТ ПРОЦЕДУРА
+       ============================================================ -->
+  <section class="section">
+    <div class="container">
+      <div class="s-head reveal">
+        <span class="s-eyebrow">Этапы</span>
+        <h2 class="s-title">Как проходит процедура</h2>
+      </div>
+      <div class="steps">
+        <div class="step reveal">
+          <h3>Выбираем эффект</h3>
+          <p>Обсуждаем, какой результат вы хотите получить, и выбираем подходящий вариант.</p>
+        </div>
+        <div class="step reveal" style="--d:.1s">
+          <h3>Подготавливаем ресницы</h3>
+          <p>Подготавливаем натуральные ресницы к процедуре.</p>
+        </div>
+        <div class="step reveal" style="--d:.2s">
+          <h3>Выполняем наращивание</h3>
+          <p>Создаём выбранный эффект — от естественной Классики до объёмного 3D.</p>
+        </div>
+        <div class="step reveal" style="--d:.3s">
+          <h3>Смотрим результат</h3>
+          <p>После процедуры вы видите готовый образ и получаете рекомендации по уходу.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       ОТЗЫВЫ — контент в JS, блок CONFIG -> REVIEWS
+       ============================================================ -->
+  <section class="section section--soft" id="reviews">
+    <div class="container">
+      <div class="s-head reveal">
+        <span class="s-eyebrow">Отзывы</span>
+        <h2 class="s-title">Что говорят после процедуры</h2>
+        <p class="s-sub"><span class="demo-tag">демо</span> Демонстрационные отзывы: тексты приведены для примера и будут заменены реальными отзывами клиентов.</p>
+      </div>
+      <div class="reviews-row reveal" id="reviewsGallery" tabindex="0" aria-label="Демонстрационные отзывы — прокручиваются горизонтально"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       ОБО МНЕ — заполнено демонстрационными данными (имя, опыт, текст).
+       Замените на реальные данные мастера; фото — в CONFIG -> about
+       ============================================================ -->
+  <section class="section" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-media reveal">
+          <div class="ph-media" id="masterMedia" role="img" aria-label="Фото мастера"></div>
+          <div class="exp-card glass">
+            <b id="expYears">6 лет</b>
+            <small>в индустрии красоты · <span class="demo-tag">демо</span></small>
+          </div>
+        </div>
+        <div class="about-info reveal" style="--d:.12s">
+          <span class="s-eyebrow">Обо мне</span>
+          <h2>Давайте знакомиться</h2>
+          <div class="name" id="masterName">Алина Соколова</div>
+          <div class="bio">
+            <p id="masterBio">Мастер по наращиванию ресниц с шестилетним опытом в индустрии красоты. Постоянно повышаю квалификацию на профильных курсах и работаю только с сертифицированными материалами. Люблю естественные результаты: ресницы должны подчёркивать взгляд, а не перегружать его — поэтому эффект всегда подбираем вместе, с учётом формы глаз и вашего образа.</p>
+            <ul>
+              <li>Подбор эффекта под форму глаз и образ</li>
+              <li>Работа с сертифицированными материалами</li>
+              <li>Аккуратные и безопасные процедуры</li>
+            </ul>
+          </div>
+          <p class="about-line">Есть вопрос перед записью? Напишите удобным способом.</p>
+          <div class="soc-row">
+            <a class="soc soc--wa" href="https://wa.me/79000000000" id="linkWA" target="_blank" rel="noopener"><span class="soc-ico">WA</span>WhatsApp</a>
+            <a class="soc soc--tg" href="https://t.me/lash_studio_demo" id="linkTG" target="_blank" rel="noopener"><span class="soc-ico">TG</span>Telegram</a>
+            <a class="soc soc--vk" href="https://vk.com/lash_studio_demo" id="linkVK" target="_blank" rel="noopener"><span class="soc-ico">VK</span>VK</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       ГДЕ НАХОДИМСЯ — заполнено демонстрационным адресом.
+       Замените на реальный адрес в CONFIG -> contacts
+       ============================================================ -->
+  <section class="section section--soft" id="where">
+    <div class="container">
+      <div class="where-grid">
+        <div class="where-info reveal">
+          <div class="pin">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <span class="s-eyebrow">Где находимся</span>
+          <h2>Студия находится по адресу:</h2>
+          <p id="studioAddress">г. Москва, ул. Примерная, д. 12, офис 305</p>
+          <div class="addr">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M5.5 13 12 21l6.5-8"/></svg>
+            <span>Ориентир: вход со двора, 5 минут от метро «Примерная»</span>
+          </div>
+          <span class="chip-note">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
+            Точный адрес и схему проезда уточняйте при записи
+          </span>
+        </div>
+        <div class="where-media reveal" style="--d:.12s">
+          <div class="ph-media" id="studioMedia" role="img" aria-label="Фото студии"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FAQ — вопросы и ответы прямо здесь, легко заменить
+       ============================================================ -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="s-head reveal">
+        <span class="s-eyebrow">FAQ</span>
+        <h2 class="s-title">Частые вопросы</h2>
+      </div>
+      <div class="faq reveal" id="faqList">
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Какой эффект выбрать?<span class="faq-ico"></span></button>
+          <div class="faq-a"><div><p>Если пока не знаете, начните с фотографий работ. Покажите мастеру понравившийся результат — вместе можно подобрать подходящий вариант.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Чем отличаются Классика, 1,5D, 2D и 3D?<span class="faq-ico"></span></button>
+          <div class="faq-a"><div><p>Главное отличие — степень объёма и выразительности. В каталоге можно сравнить фотографии каждого варианта.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Сколько длится процедура?<span class="faq-ico"></span></button>
+          <div class="faq-a"><div><p>[Указать информацию заказчика.]</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Сколько носятся ресницы?<span class="faq-ico"></span></button>
+          <div class="faq-a"><div><p>[Указать информацию заказчика.]</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Как подготовиться к процедуре?<span class="faq-ico"></span></button>
+          <div class="faq-a"><div><p>[Указать информацию заказчика.]</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Когда нужна коррекция или новое наращивание?<span class="faq-ico"></span></button>
+          <div class="faq-a"><div><p>[Указать информацию заказчика.]</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       ПАМЯТКА ПОСЛЕ ПРОЦЕДУРЫ — рекомендации, легко заменить
+       ============================================================ -->
+  <section class="section section--soft" id="care">
+    <div class="container">
+      <div class="memo reveal">
+        <div>
+          <span class="s-eyebrow">Памятка после процедуры</span>
+          <h2>Как ухаживать за ресницами</h2>
+          <p class="lead">[Разместить рекомендации мастера по уходу после процедуры. Ниже — базовый список, который можно дополнить.]</p>
+          <p class="memo-note">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Сохраните памятку, чтобы рекомендации всегда были под рукой.
+          </p>
+        </div>
+        <ul class="memo-list">
+          <li><span class="ok">✓</span>Не мочить ресницы первые 24 часа после процедуры.</li>
+          <li><span class="ok">✓</span>Не использовать масляные средства для снятия макияжа — только безысляные.</li>
+          <li><span class="ok">✓</span>Расчёсывать ресницы сухой чистой щёточкой по утрам.</li>
+          <li><span class="ok">✓</span>Не тереть глаза и не спать лицом в подушку.</li>
+          <li><span class="ok">✓</span>Первые двое суток избегать сауны, бани и активного спорта.</li>
+          <li><span class="ok">✓</span>Приходить на коррекцию или новое наращивание вовремя.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       ФИНАЛЬНЫЙ ПРИЗЫВ
+       ============================================================ -->
+  <section class="section">
+    <div class="container">
+      <div class="final reveal">
+        <span class="s-eyebrow">Запись</span>
+        <h2>Готовы выбрать свой эффект?</h2>
+        <p>Посмотрите свободное время и запишитесь на процедуру.</p>
+<a class="btn btn--accent js-booking" href="#schedule">Посмотреть свободное время</a>
+        <p class="final-note">Не знаете, что выбрать? Напишите мастеру — можно начать с подбора эффекта.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================================================
+     ПОДВАЛ — контакты заполнены демонстрационными данными.
+     Замените: телефон, ссылки (CONFIG -> contacts), акция «Приведи друга»
+     ============================================================ -->
+<footer class="footer" id="contacts">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <a class="brand" href="#hero">
+          <img class="brand-img" src="Screenshorts/logo.png" alt="Логотип студии" onerror="this.hidden=true;">
+          <span class="brand-name">LASH STUDIO<small>наращивание ресниц</small></span>
+        </a>
+        <p class="about-line">Студия наращивания ресниц. Подберём эффект под ваши глаза — от естественной Классики до выразительного 3D.</p>
+        <div class="soc-row" style="margin-top:6px">
+          <a class="soc soc--wa" href="https://wa.me/79000000000" id="linkWA2" target="_blank" rel="noopener"><span class="soc-ico">WA</span>WhatsApp</a>
+          <a class="soc soc--tg" href="https://t.me/lash_studio_demo" id="linkTG2" target="_blank" rel="noopener"><span class="soc-ico">TG</span>Telegram</a>
+          <a class="soc soc--vk" href="https://vk.com/lash_studio_demo" id="linkVK2" target="_blank" rel="noopener"><span class="soc-ico">VK</span>VK</a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Навигация</h4>
+        <ul class="footer-nav">
+          <li><a href="#effects">Каталог эффектов</a></li>
+          <li><a href="#schedule">Свободные окна</a></li>
+          <li><a href="#work">Мои работы</a></li>
+          <li><a href="#reviews">Отзывы</a></li>
+          <li><a href="#about">Обо мне</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Контакты</h4>
+        <div class="footer-links">
+          <a href="tel:+79000000000" id="phoneLink">+7 (900) 000-00-00</a>
+          <a href="https://instagram.com/lash_studio_demo" id="instLink" target="_blank" rel="noopener">@lash_studio_demo · Instagram*</a>
+          <span style="font-size:.9rem; opacity:.7" id="addressFooter">г. Москва, ул. Примерная, д. 12, офис 305</span>
+        </div>
+
+        <div class="fp-badge" id="friendPromo">
+          <span class="gift">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg>
+          </span>
+          <span>
+            <b>Приведи друга</b>
+            <small>[Указать условия акции, предоставленные заказчиком.]</small>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> LASH STUDIO · наращивание ресниц</span>
+      <span>Сделано с любовью к ресницам</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Модальное окно отзыва -->
+<div class="modal" id="reviewModal" role="dialog" aria-modal="true" aria-labelledby="reviewModalTitle">
+  <div class="modal-card">
+    <button class="modal-close" id="reviewClose" aria-label="Закрыть">✕</button>
+    <div class="modal-stars">★★★★★</div>
+    <h3 id="reviewModalTitle"></h3>
+    <div class="who-sub" id="reviewModalSub"></div>
+    <article id="reviewModalText"></article>
+  </div>
+</div>
+
+<!-- ============================================================
+     МОДАЛЬНОЕ ОКНО ОНЛАЙН-ЗАПИСИ
+     ЗАМЕНИТЕ: ссылку «Политикой конфиденциальности» на реальную.
+     ============================================================ -->
+<div class="modal booking-modal" id="bookingModal" role="dialog" aria-modal="true" aria-labelledby="bookingTitle">
+  <div class="modal-card booking-card" id="bookingCard">
+
+    <!-- Состояние: форма -->
+    <div id="bookingFormView">
+      <button class="modal-close" id="bookingClose" aria-label="Закрыть">✕</button>
+      <h3 class="booking-title" id="bookingTitle" tabindex="-1">Записаться на наращивание</h3>
+      <p class="booking-sub">Оставьте контакты и выберите желаемый эффект. Мастер свяжется с вами для подтверждения записи.</p>
+
+      <form class="booking-form" id="bookingForm" novalidate>
+        <div class="booking-grid">
+          <div class="field">
+            <label class="field-label" for="bkName">Ваше имя <span class="req" aria-hidden="true">*</span></label>
+            <input type="text" id="bkName" name="name" placeholder="Например, Анна" autocomplete="name" required>
+            <span class="field-error" data-msg="Пожалуйста, укажите ваше имя"></span>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="bkPhone">Телефон <span class="req" aria-hidden="true">*</span></label>
+            <input type="tel" id="bkPhone" name="phone" placeholder="+7 ___ ___-__-__" autocomplete="tel" required>
+            <span class="field-error" data-msg="Укажите номер телефона"></span>
+          </div>
+
+          <div class="field field--full">
+            <label class="field-label" for="bkEffect">Какой эффект хотите?</label>
+            <select id="bkEffect" name="effect">
+              <option value="Не знаю — хочу подобрать" selected>Не знаю — хочу подобрать</option>
+              <option value="Классика">Классика</option>
+              <option value="Мокрый эффект">Мокрый эффект</option>
+              <option value="1,5D">1,5D</option>
+              <option value="2D">2D</option>
+              <option value="3D">3D</option>
+            </select>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="bkDate">Желаемая дата <span class="req" aria-hidden="true">*</span></label>
+            <input type="date" id="bkDate" name="date" required>
+            <span class="field-error" data-msg="Выберите желаемую дату"></span>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="bkTime">Удобное время <span class="req" aria-hidden="true">*</span></label>
+            <select id="bkTime" name="time" required>
+              <option value="" selected disabled>Выберите время</option>
+              <option value="09:00">09:00</option>
+              <option value="10:00">10:00</option>
+              <option value="11:00">11:00</option>
+              <option value="12:00">12:00</option>
+              <option value="13:00">13:00</option>
+              <option value="14:00">14:00</option>
+              <option value="15:00">15:00</option>
+              <option value="16:00">16:00</option>
+              <option value="17:00">17:00</option>
+              <option value="18:00">18:00</option>
+              <option value="19:00">19:00</option>
+              <option value="20:00">20:00</option>
+            </select>
+            <span class="field-error" data-msg="Выберите удобное время"></span>
+          </div>
+
+          <div class="field field--full">
+            <label class="field-label" for="bkComment">Комментарий <span class="optional">необязательно</span></label>
+            <textarea id="bkComment" name="comment" rows="3" placeholder="Например: хочу максимально естественный эффект"></textarea>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field field--full field-check">
+            <input type="checkbox" id="bkConsent" name="consent" required>
+            <label class="field-label field-label--check" for="bkConsent">
+              Я согласен(а) на обработку персональных данных и ознакомлен(а) с
+              <a class="policy-link" href="#privacy" id="policyLink" target="_blank" rel="noopener">Политикой конфиденциальности</a>.
+            </label>
+            <span class="field-error" data-msg="Необходимо согласие на обработку данных"></span>
+          </div>
+        </div>
+
+        <div class="booking-error" id="bookingError" role="alert" hidden>Не удалось отправить заявку. Попробуйте ещё раз.</div>
+        <button type="submit" class="btn btn--primary booking-submit" id="bookingSubmit">Отправить заявку</button>
+        <p class="booking-note">Мастер свяжется с вами, чтобы подтвердить дату и время.</p>
+      </form>
+    </div>
+
+    <!-- Состояние: успех -->
+    <div class="booking-success" id="bookingSuccess" hidden>
+      <div class="booking-ok" aria-hidden="true">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+      </div>
+      <h3 class="booking-title">Спасибо! Заявка отправлена</h3>
+      <p class="booking-sub">Мастер свяжется с вами для подтверждения записи.</p>
+      <button type="button" class="btn btn--primary js-close-booking" id="bookingDone">Вернуться на сайт</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   CONFIG — вся изменяемая информация собрана здесь.
+   Меняйте: тексты, цены, пути к фото/видео, ссылки, контакты.
+   Если в поле src оставить пустую строку "", будет показан
+   аккуратный плейсхолдер. Укажите путь (например "media/work-1.webp")
+   — появится ваше фото/видео.
+   ============================================================ */
+const CONFIG = {
+  brand: { name: "LASH STUDIO", tagline: "наращивание ресниц" },
+
+  /* Онлайн-запись: URL развёрнутого Google Apps Script Web App.
+     Сюда форма отправляет заявку, скрипт пишет её в Google Sheets.
+     Укажите свой URL при публикации (см. google-apps-script.gs). */
+  booking: {
+    endpoint: "https://script.google.com/macros/s/AKfycbxvyH_n6w2UgbJ6odBVndhW36XEpQRPxZeSxbqwjmGlN1FvCk0j6HoJ_1najj_owFql/exec"
+  },
+
+  /* Контакты — демонстрационные данные. Замените на реальные:
+     телефон, WhatsApp (https://wa.me/7...), Telegram, VK, Instagram, адрес. */
+  contacts: {
+    phoneDisplay: "+7 (900) 000-00-00",
+    phoneHref: "tel:+79000000000",
+    whatsapp: "https://wa.me/79000000000",
+    telegram: "https://t.me/lash_studio_demo",
+    vk: "https://vk.com/lash_studio_demo",
+    instagram: "@lash_studio_demo",
+    instagramUrl: "https://instagram.com/lash_studio_demo",
+    address: "г. Москва, ул. Примерная, д. 12, офис 305",
+    landmark: "вход со двора, 5 минут от метро «Примерная»"
+  },
+
+  hero: {
+    /* Крупное фото первого экрана. Пустая строка — плейсхолдер */
+    image: "Screenshorts/hero%20block.png",
+    faces: 5           // сколько аватаров «клиентов» в hero (декоративные плейсхолдеры)
+  },
+
+  /* Данные мастера — демонстрационные: имя, текст и опыт заменяются
+     на реальные; фото мастера/студии задаётся здесь же */
+  about: {
+    masterImage: "",   // фото мастера
+    studioImage: "",   // фото студии
+    masterName: "Алина Соколова",
+    masterBio: "Мастер по наращиванию ресниц с шестилетним опытом в индустрии красоты. Постоянно повышаю квалификацию на профильных курсах и работаю только с сертифицированными материалами. Люблю естественные результаты: ресницы должны подчёркивать взгляд, а не перегружать его — поэтому эффект всегда подбираем вместе, с учётом формы глаз и вашего образа.",
+    expYears: "6 лет"
+  },
+
+  /* Каталог эффектов: id, name, price, desc, img, tag */
+  effects: [
+    { id: "classic", name: "Классика",    price: "по запросу", desc: "Для более естественного результата.", img: "Screenshorts/classic.png", tag: "Естественный" },
+    { id: "wet",     name: "Мокрый эффект", price: "по запросу", desc: "Для подчёркнутых, заметных лучиков.", img: "Screenshorts/wet.png", tag: "Лучики-звёздочки" },
+    { id: "1.5d",    name: "1,5D",        price: "по запросу", desc: "Больше выразительности, сохраняя лёгкость образа.", img: "Screenshorts/15D.png", tag: "Лёгкий объём" },
+    { id: "2d",      name: "2D",          price: "по запросу", desc: "Более заметный объём и выразительный взгляд.", img: "Screenshorts/2D.png", tag: "Средний объём" },
+    { id: "3d",      name: "3D",          price: "по запросу", desc: "Для тех, кто хочет более яркий и объёмный результат.", img: "Screenshorts/3D.png", tag: "Максимальный объём" }
+  ],
+
+  /* Портфолио: type: "img" | "video"; src — путь к файлу;
+     для видео MP4 (автовоспроизведение без звука при прокрутке) укажите src */
+  works: [
+    { type: "img",   title: "Классика",      src: "" },
+    { type: "img",   title: "Мокрый эффект", src: "" },
+    { type: "video", title: "Процесс",       src: "" },
+    { type: "img",   title: "1,5D",          src: "" },
+    { type: "img",   title: "2D",            src: "" },
+    { type: "video", title: "Результат",     src: "" },
+    { type: "img",   title: "3D",            src: "" },
+    { type: "img",   title: "Классика",      src: "" },
+    { type: "img",   title: "1,5D",          src: "" },
+    { type: "img",   title: "2D",            src: "" }
+  ],
+
+  /* Отзывы — ДЕМОНСТРАЦИОННЫЕ: на сайте помечены как «демо».
+     Замените на реальные тексты. Длинные
+     отзывы автоматически сокращаются с кнопкой «Читать полностью» */
+  reviews: [
+    { name: "Анастасия", text: "Долго выбирала между классикой и 2D: мастер помогла определиться и показала реальные работы до записи. В итоге взяла 2D — взгляд стал выразительнее, но при этом совершенно естественный. Носила больше месяца, выглядели отлично. Обязательно вернусь на коррекцию." },
+    { name: "Марина", text: "Очень аккуратная работа. Ресницы получились лёгкими и красивыми, во время процедуры было комфортно. Отдельное спасибо за памятку по уходу — всё понятно и без воды." },
+    { name: "Ольга", text: "Первый раз наращивала ресницы и боялась, что будет выглядеть неестественно. Переживала зря — эффект получился деликатным, глаза не перегружены. Классика — то, что нужно для меня. Спустя три недели почти не заметно, что нужна коррекция." },
+    { name: "Дарья", text: "Мокрый эффект — это любовь :) Все спрашивают, как я так красиво крашу ресницы. Работа выполнена очень качественно, носятся долго, за это время ни одна ресничка не отклеилась раньше времени." },
+    { name: "Екатерина", text: "Мастер очень приятная и внимательная. Рассказала обо всех различиях эффектов, помогла выбрать под форму глаз. Результат превзошёл ожидания — глаза стали больше и выразительнее. Рекомендую студию всем подругам." },
+    { name: "Ксения", text: "Пришла на коррекцию после другой студии — привели ресницы в идеальный вид и объяснили, как ухаживать, чтобы эффект держался дольше. Внимание к деталям видно сразу. Теперь только сюда." }
+  ]
+};
+
+/* Блокировка прокрутки страницы, пока открыто любое модальное окно */
+const scrollLock = {
+  n: 0,
+  add(){ this.n++; document.body.classList.add("no-scroll"); },
+  release(){ this.n = Math.max(0, this.n - 1); if (!this.n) document.body.classList.remove("no-scroll"); }
+};
+
+/* Мост для ссылок в HTML (заполняется из CONFIG) */
+(function applyContacts(){
+  const c = CONFIG.contacts;
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  const setHref = (id, val) => { const el = document.getElementById(id); if (el) el.setAttribute("href", val); };
+  set("phoneLink", c.phoneDisplay);          setHref("phoneLink", c.phoneHref);
+  set("instLink", c.instagram + " · Instagram*");
+  setHref("instLink", c.instagramUrl || "#");
+  set("addressFooter", c.address);
+  set("studioAddress", c.address);
+  set("masterName", CONFIG.about.masterName);
+  set("masterBio", CONFIG.about.masterBio);
+  set("expYears", CONFIG.about.expYears);
+  setHref("linkWA", c.whatsapp); setHref("linkTG", c.telegram); setHref("linkVK", c.vk);
+  setHref("linkWA2", c.whatsapp); setHref("linkTG2", c.telegram); setHref("linkVK2", c.vk);
+  document.querySelectorAll("#where .addr span").forEach(el => el.textContent = "Ориентир: " + c.landmark);
+  const yr = document.getElementById("year"); if (yr) yr.textContent = new Date().getFullYear();
+})();
+
+/* ============================================================
+   ПЛЕЙСХОЛДЕРЫ МЕДИА — SVG-заглушки (не требуют файлов).
+   При добавлении реальных фото в CONFIG они не используются.
+   ============================================================ */
+const PH_TONES = [
+  ["#F8F5EE", "#EEE5E0"], ["#F4EDE6", "#E5D8CE"], ["#F4EFE6", "#E8DCCB"],
+  ["#F5EBE3", "#E8D2C4"], ["#F8F3EC", "#E5DEDA"], ["#F4E7DC", "#E0C8B6"]
+];
+function phImage(label, i, ratio, sub){
+  const [c1, c2] = PH_TONES[i % PH_TONES.length];
+  const W = 760, H = Math.round(760 * ratio);
+  const arcs = [
+    'M120 568 Q270 470 505 530',
+    'M170 638 Q340 556 565 612',
+    'M240 710 Q415 640 600 690'
+  ].map((d, k) =>
+    `<path d="${d}" fill="none" stroke="rgba(122,90,58,.30)" stroke-width="6" stroke-linecap="round" opacity="${(0.35 + k * 0.18).toFixed(2)}"/>`
+  ).join("");
+  const svg =
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">` +
+    `<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">` +
+    `<stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/>` +
+    `</linearGradient><radialGradient id="gl" cx="0.75" cy="0.16" r="0.95">` +
+    `<stop offset="0" stop-color="#fff" stop-opacity="0.5"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>` +
+    `</radialGradient></defs>` +
+    `<rect width="${W}" height="${H}" fill="url(#g)"/>` +
+    `<rect width="${W}" height="${H}" fill="url(#gl)"/>` +
+    `<circle cx="${W*0.5}" cy="${H*0.2}" r="${W*0.13}" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="2"/>` +
+    arcs +
+    `<rect x="${W*0.06}" y="${H*0.06}" width="${W*0.88}" height="${H*0.88}" rx="${W*0.04}" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="2"/>` +
+    `<text x="${W/2}" y="${H*0.52}" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="${Math.round(W*0.05)}" letter-spacing="4" fill="rgba(86,60,34,.75)">${label.toUpperCase()}</text>` +
+    `<text x="${W/2}" y="${H*0.52 + Math.round(W*0.055)}" text-anchor="middle" font-family="Verdana, sans-serif" font-size="${Math.round(W*0.027)}" letter-spacing="3" fill="rgba(86,60,34,.45)">${(sub || "фото работы").toUpperCase()}</text>` +
+    `</svg>`;
+  return `url("data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}")`;
+}
+function applyBg(el, label, i, ratio, sub){
+  el.style.backgroundImage = phImage(label, i, ratio, sub);
+}
+
+/* ============================================================
+   HERO-АВАТАРЫ (декоративные)
+   ============================================================ */
+(function heroFaces(){
+  const wrap = document.getElementById("heroFaces");
+  const n = CONFIG.hero.faces || 4;
+  const colors = ["#cdab94", "#b98d75", "#a6775f", "#c79a80", "#d9b49c"];
+  for (let k = 0; k < n; k++){
+    const f = document.createElement("span");
+    f.className = "face";
+    f.style.background = `linear-gradient(135deg, ${colors[k % colors.length]}, ${colors[(k+2) % colors.length]})`;
+    f.setAttribute("aria-hidden", "true");
+    wrap.appendChild(f);
+  }
+})();
+
+/* ============================================================
+   МЕДИА СЕКЦИЙ (hero, мастер, студия)
+   ============================================================ */
+(function heroMedia(){
+  const el = document.getElementById("heroMedia");
+  applyBg(el, "Ресницы", 1, 4/5, "фото работы");
+  if (CONFIG.hero.image) el.style.backgroundImage = `url("${CONFIG.hero.image}")`;
+})();
+(function aboutMedia(){
+  applyBg(document.getElementById("masterMedia"), "Мастер", 2, 4/5, "фото мастера");
+  if (CONFIG.about.masterImage) document.getElementById("masterMedia").style.backgroundImage = `url("${CONFIG.about.masterImage}")`;
+  applyBg(document.getElementById("studioMedia"), "Студия", 4, 1/1, "фото студии");
+  if (CONFIG.about.studioImage) document.getElementById("studioMedia").style.backgroundImage = `url("${CONFIG.about.studioImage}")`;
+})();
+
+/* ============================================================
+   КАТАЛОГ ЭФФЕКТОВ (табы)
+   ============================================================ */
+(function catalog(){
+  const bar = document.getElementById("tabsBar");
+  const panel = document.getElementById("tabsPanel");
+  let cur = 0;
+  const ph = document.createElement("div");
+  ph.className = "ph-media tabs-media";
+  ph.setAttribute("aria-hidden", "true");
+  const info = document.createElement("div");
+  info.className = "tabs-info";
+  panel.append(ph, info);
+  panel.classList.add("fx");
+
+  function render(i){
+    const e = CONFIG.effects[i];
+    ph.style.backgroundImage = e.img
+      ? `url("${e.img}")`
+      : phImage(e.name, i, 4/5, "фото работы");
+    info.innerHTML =
+      `<span class="tag">${e.tag || "Эффект"}</span>` +
+      `<h3>${e.name}</h3>` +
+      `<p class="desc">${e.desc}</p>` +
+      `<div class="price"><span>Цена</span><b>${e.price}</b></div>` +
+      `<div class="tabs-actions"><a class="btn btn--accent js-booking" data-effect="${e.name}" href="#schedule">Записаться</a></div>` +
+      `<p class="hint">Не уверены? Напишите мастеру — поможем подобрать эффект и сообщим стоимость.</p>`;
+    panel.classList.remove("fx");
+    void panel.offsetWidth;
+    panel.classList.add("fx");
+  }
+
+  CONFIG.effects.forEach((e, i) => {
+    const b = document.createElement("button");
+    b.className = "tab-btn" + (i === 0 ? " active" : "");
+    b.setAttribute("role", "tab");
+    b.setAttribute("aria-selected", i === 0 ? "true" : "false");
+    b.type = "button";
+    b.textContent = e.name;
+    b.addEventListener("click", () => {
+      if (i === cur) return;
+      bar.querySelectorAll(".tab-btn").forEach((x, xi) => {
+        x.classList.toggle("active", xi === i);
+        x.setAttribute("aria-selected", xi === i ? "true" : "false");
+      });
+      cur = i;
+      render(i);
+    });
+    bar.appendChild(b);
+  });
+
+  render(0);
+})();
+
+/* ============================================================
+   ПОРТФОЛИО (лента фото + видео)
+   ============================================================ */
+(function portfolio(){
+  const g = document.getElementById("portfolioGallery");
+
+  function mediaEl(w, i){
+    if (w.type === "video" && w.src){
+      const v = document.createElement("video");
+      v.muted = true; v.loop = true; v.playsInline = true; v.preload = "metadata";
+      v.src = w.src;
+      v.setAttribute("aria-label", w.title + " — видео");
+      return v;
+    }
+    const ph = document.createElement("div");
+    ph.className = "ph-media";
+    ph.style.backgroundImage = w.src
+      ? `url("${w.src}")`
+      : phImage(w.title, i, 3/4, w.type === "video" ? "видео работы" : "фото работы");
+    return ph;
+  }
+
+  CONFIG.works.forEach((w, i) => {
+    const item = document.createElement("div");
+    item.className = "work-item";
+    item.appendChild(mediaEl(w, i));
+    if (w.type === "video"){
+      const play = document.createElement("span");
+      play.className = "play";
+      play.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+      item.appendChild(play);
+    }
+    const chip = document.createElement("span");
+    chip.className = "chip";
+    chip.textContent = w.title + (w.type === "video" ? " · видео" : "");
+    item.appendChild(chip);
+    g.appendChild(item);
+  });
+})();
+
+/* ============================================================
+   ОТЗЫВЫ + МОДАЛЬНОЕ ОКНО
+   ============================================================ */
+(function reviews(){
+  const g = document.getElementById("reviewsGallery");
+  const modal = document.getElementById("reviewModal");
+  const mTitle = document.getElementById("reviewModalTitle");
+  const mSub = document.getElementById("reviewModalSub");
+  const mText = document.getElementById("reviewModalText");
+  const closeBtn = document.getElementById("reviewClose");
+  const MAX = 190;
+
+  let openData = null;
+
+  function trunc(text){
+    if (text.length <= MAX) return { short: text, more: false };
+    const cut = text.slice(0, MAX);
+    const sp = cut.lastIndexOf(" ");
+    return { short: cut.slice(0, sp > 60 ? sp : MAX).trim() + "…", more: true };
+  }
+  function openModal(r){
+    openData = r;
+    mTitle.textContent = r.name;
+    mSub.textContent = "Демо-отзыв клиента";
+    mText.textContent = r.text;
+    modal.classList.add("open");
+    scrollLock.add();
+    closeBtn.focus();
+  }
+  function closeModal(){
+    modal.classList.remove("open");
+    scrollLock.release();
+    openData = null;
+  }
+
+  CONFIG.reviews.forEach((r, i) => {
+    const card = document.createElement("div");
+    card.className = "review-card";
+    const t = trunc(r.text);
+    const ava = document.createElement("span");
+    ava.className = "ava"; ava.textContent = r.name.trim().charAt(0).toUpperCase();
+
+    const who = document.createElement("div");
+    who.className = "who";
+    const whoText = document.createElement("span");
+    whoText.innerHTML = `<b>${r.name}</b><small>демо-отзыв</small>`;
+    who.append(ava, whoText);
+
+    const stars = document.createElement("div");
+    stars.className = "review-stars"; stars.textContent = "★★★★★";
+    const body = document.createElement("p");
+    body.className = "review-text";
+    body.textContent = t.short;
+
+    card.append(stars, who, body);
+
+    if (t.more){
+      const btn = document.createElement("button");
+      btn.className = "more";
+      btn.type = "button";
+      btn.textContent = "Читать полностью";
+      btn.setAttribute("aria-label", "Открыть полный отзыв " + r.name);
+      btn.addEventListener("click", () => openModal(r));
+      card.appendChild(btn);
+    }
+    g.appendChild(card);
+  });
+
+  closeBtn.addEventListener("click", closeModal);
+  modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape" || !modal.classList.contains("open")) return;
+    if (document.getElementById("bookingModal").classList.contains("open")) return;
+    closeModal();
+  });
+})();
+
+/* ============================================================
+   VIDEO AUTOPLAY — запуск только при появлении в области просмотра
+   ============================================================ */
+(function videos(){
+  const vids = document.querySelectorAll("#portfolioGallery video");
+  if (!("IntersectionObserver" in window) || !vids.length) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => {
+      if (en.isIntersecting && en.intersectionRatio > 0.4){
+        const p = en.target.play(); if (p) p.catch(() => {});
+      } else {
+        en.target.pause();
+      }
+    });
+  }, { threshold: [0.4] });
+  vids.forEach(v => io.observe(v));
+})();
+
+/* ============================================================
+   ГОРИЗОНТАЛЬНЫЕ ЛЕНТЫ: колесо мыши, драг, свайп, стрелки
+   ============================================================ */
+function initHScroll(sc){
+  const shell = sc.closest(".g-shell");
+  const prev = shell ? shell.querySelector(".g-nav--prev") : null;
+  const next = shell ? shell.querySelector(".g-nav--next") : null;
+  let suppressClick = false;
+
+  function updateNav(){
+    if (!shell) return;
+    prev.disabled = sc.scrollLeft <= 4;
+    next.disabled = sc.scrollLeft + sc.clientWidth >= sc.scrollWidth - 4;
+  }
+  updateNav();
+  sc.addEventListener("scroll", updateNav, { passive: true });
+  window.addEventListener("resize", updateNav);
+
+  if (prev){
+    prev.addEventListener("click", () => sc.scrollBy({ left: -sc.clientWidth * 0.8, behavior: "smooth" }));
+    next.addEventListener("click", () => sc.scrollBy({ left: sc.clientWidth * 0.8, behavior: "smooth" }));
+  }
+
+  /* колесо мыши -> горизонтальная прокрутка */
+  sc.addEventListener("wheel", (e) => {
+    const dx = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+    const atStart = dx < 0 && sc.scrollLeft <= 0;
+    const atEnd = dx > 0 && sc.scrollLeft + sc.clientWidth >= sc.scrollWidth - 1;
+    if (atStart || atEnd) return; /* отдаём прокрутку странице */
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) e.preventDefault();
+    sc.scrollLeft += dx;
+  }, { passive: false });
+
+  /* перетаскивание мышью */
+  let startX = 0, startLeft = 0, dragging = false, moved = false;
+  sc.addEventListener("pointerdown", (e) => {
+    if (e.pointerType !== "mouse") return;
+    startX = e.clientX; startLeft = sc.scrollLeft; moved = false; dragging = true;
+    sc.classList.add("is-dragging");
+    if (shell) shell.classList.add("is-dragging");
+    if (sc.setPointerCapture) sc.setPointerCapture(e.pointerId);
+  });
+  sc.addEventListener("pointermove", (e) => {
+    if (!dragging) return;
+    const dx = e.clientX - startX;
+    if (Math.abs(dx) > 5) moved = true;
+    if (moved) sc.scrollLeft = startLeft - dx;
+  });
+  const endDrag = (e) => {
+    if (!dragging) return;
+    dragging = false;
+    suppressClick = moved && e && e.type === "pointerup";
+    sc.classList.remove("is-dragging");
+    if (shell) shell.classList.remove("is-dragging");
+    updateNav();
+  };
+  sc.addEventListener("pointerup", endDrag);
+  sc.addEventListener("pointercancel", endDrag);
+  sc.addEventListener("dragstart", (e) => e.preventDefault());
+  sc.addEventListener("click", (e) => {
+    if (suppressClick){ e.preventDefault(); e.stopPropagation(); suppressClick = false; }
+  }, true);
+}
+document.querySelectorAll(".h-scroll, .reviews-row").forEach(initHScroll);
+
+/* ============================================================
+   ШАПКА: стеклянная при скролле
+   ============================================================ */
+(function headerFx(){
+  const header = document.getElementById("header");
+  const onScroll = () => header.classList.toggle("scrolled", window.scrollY > 8);
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+})();
+
+/* ============================================================
+   МОБИЛЬНОЕ МЕНЮ
+   ============================================================ */
+(function menu(){
+  const burger = document.getElementById("burger");
+  const menuEl = document.getElementById("mobileMenu");
+  const links = menuEl.querySelectorAll("a");
+  const set = (open) => {
+    document.body.classList.toggle("nav-open", open);
+    burger.setAttribute("aria-expanded", open ? "true" : "false");
+  };
+  burger.addEventListener("click", () => set(!document.body.classList.contains("nav-open")));
+  links.forEach(l => l.addEventListener("click", () => set(false)));
+  document.addEventListener("click", (e) => {
+    if (!menuEl.contains(e.target) && !burger.contains(e.target)) set(false);
+  });
+})();
+
+/* ============================================================
+   FAQ ACCORDION
+   ============================================================ */
+(function faq(){
+  document.querySelectorAll(".faq-item").forEach(item => {
+    const q = item.querySelector(".faq-q");
+    q.addEventListener("click", () => {
+      const isOpen = item.classList.contains("open");
+      document.querySelectorAll(".faq-item.open").forEach(o => {
+        o.classList.remove("open");
+        o.querySelector(".faq-q").setAttribute("aria-expanded", "false");
+      });
+      if (!isOpen){
+        item.classList.add("open");
+        q.setAttribute("aria-expanded", "true");
+      }
+    });
+  });
+})();
+
+/* ============================================================
+   ОНЛАЙН-ЗАПИСЬ: модальное окно с формой
+   ============================================================ */
+(function booking(){
+  const modal = document.getElementById("bookingModal");
+  const formView = document.getElementById("bookingFormView");
+  const successView = document.getElementById("bookingSuccess");
+  const form = document.getElementById("bookingForm");
+  const closeBtn = document.getElementById("bookingClose");
+  const doneBtn = document.getElementById("bookingDone");
+  const submitBtn = document.getElementById("bookingSubmit");
+  const errorBox = document.getElementById("bookingError");
+  const fields = {
+    name:    document.getElementById("bkName"),
+    phone:   document.getElementById("bkPhone"),
+    effect:  document.getElementById("bkEffect"),
+    date:    document.getElementById("bkDate"),
+    time:    document.getElementById("bkTime"),
+    comment: document.getElementById("bkComment"),
+    consent: document.getElementById("bkConsent")
+  };
+  let lastFocus = null;
+
+  /* Минимальная допустимая дата — сегодня */
+  (function setMinDate(){
+    const today = new Date();
+    const iso = today.getFullYear() + "-" +
+      String(today.getMonth() + 1).padStart(2, "0") + "-" +
+      String(today.getDate()).padStart(2, "0");
+    fields.date.min = iso;
+  })();
+
+  function reset(){
+    form.reset();
+    formView.hidden = false;
+    successView.hidden = true;
+    errorBox.hidden = true;
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Отправить заявку";
+    document.querySelectorAll(".booking-form .field").forEach(f => f.classList.remove("has-error"));
+    form.querySelectorAll(".field-error").forEach(e => e.textContent = "");
+  }
+
+  function open(prefillEffect){
+    reset();
+    lastFocus = document.activeElement;
+    if (prefillEffect){
+      const opts = [...fields.effect.options];
+      const match = opts.find(o => o.value === prefillEffect);
+      if (match) fields.effect.value = match.value;
+    }
+    modal.classList.add("open");
+    scrollLock.add();
+    window.setTimeout(() => fields.name.focus(), 60);
+  }
+
+  function close(){
+    if (!modal.classList.contains("open")) return;
+    modal.classList.remove("open");
+    scrollLock.release();
+    reset();
+    if (lastFocus && lastFocus.focus){ lastFocus.focus(); lastFocus = null; }
+  }
+
+  /* Открытие по всем кнопкам «Записаться» / «Посмотреть свободное время» */
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".js-booking");
+    if (!btn) return;
+    e.preventDefault();
+    open(btn.getAttribute("data-effect") || null);
+  });
+
+  closeBtn.addEventListener("click", close);
+  doneBtn.addEventListener("click", close);
+  modal.addEventListener("click", (e) => { if (e.target === modal) close(); });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modal.classList.contains("open")) close();
+    if (e.key === "Tab" && modal.classList.contains("open")){
+      const visible = [...modal.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )].filter(el => el.getClientRects().length > 0);
+      if (!visible.length) return;
+      const first = visible[0], last = visible[visible.length - 1];
+      if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+    }
+  });
+
+  /* Отправка заявки в Google Apps Script Web App (см. google-apps-script.gs).
+     Никаких ключей и секретов в коде нет — для доступа используется
+     только публичный URL веб-приложения из CONFIG.booking.endpoint. */
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    errorBox.hidden = true;
+
+    function hasError(input, msg){
+      const wrap = input.closest(".field");
+      const errEl = wrap.querySelector(".field-error");
+      let invalid = false;
+      if (input.type === "checkbox") invalid = !input.checked;
+      else invalid = !input.value.trim();
+      if (!invalid && input.type === "tel") invalid = !/^\+?[\d\s()\-]{10,18}$/.test(input.value.trim());
+      wrap.classList.toggle("has-error", invalid);
+      if (errEl) errEl.textContent = invalid ? (errEl.dataset.msg || msg) : "";
+      return invalid;
+    }
+
+    const errs = [
+      hasError(fields.name, "Пожалуйста, укажите ваше имя"),
+      hasError(fields.phone, "Укажите номер телефона"),
+      hasError(fields.date, "Выберите желаемую дату"),
+      hasError(fields.time, "Выберите удобное время"),
+      hasError(fields.consent, "")
+    ];
+    if (errs.some(Boolean)){
+      const firstError = form.querySelector(".has-error input, .has-error select, .has-error textarea");
+      if (firstError) firstError.focus();
+      return;
+    }
+
+    const originalLabel = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Отправляем...";
+
+    const payload = {
+      name:   fields.name.value.trim(),
+      phone:  fields.phone.value.trim(),
+      effect: fields.effect.value,
+      date:   fields.date.value,
+      time:   fields.time.value,
+      comment: fields.comment.value.trim()
+    };
+
+    /* Content-Type text/plain — чтобы браузер не слал CORS-предзапрос OPTIONS */
+    fetch(CONFIG.booking.endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    })
+      .then((r) => {
+        if (!r.ok) throw new Error("http " + r.status);
+        return r.json();
+      })
+      .then((res) => {
+        if (!res || res.ok !== true) throw new Error("bad response");
+        reset();
+        formView.hidden = true;
+        successView.hidden = false;
+        modal.querySelector(".booking-title").focus();
+      })
+      .catch(() => {
+        errorBox.hidden = false;
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalLabel;
+      });
+  });
+})();
+
+/* ============================================================
+   ПОЯВЛЕНИЕ ПРИ СКРОЛЛЕ
+   ============================================================ */
+(function reveal(){
+  const els = document.querySelectorAll(".reveal");
+  if (!("IntersectionObserver" in window)){
+    els.forEach(el => el.classList.add("visible"));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => {
+      if (en.isIntersecting){ en.target.classList.add("visible"); io.unobserve(en.target); }
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+  els.forEach(el => io.observe(el));
+})();
+</script>
+
+</body>
+</html>
